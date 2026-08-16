@@ -1,0 +1,35 @@
+@page "/register"
+@inject CoraApp.Services.UserService UserService
+@inject NavigationManager Nav
+
+<h3>Registro</h3>
+<p style="color:red">@message</p>
+<div>
+    <input placeholder="Usuário" @bind="username" />
+</div>
+<div>
+    <input placeholder="Senha" type="password" @bind="password" />
+</div>
+<div>
+    <button @onclick="HandleRegister">Registrar</button>
+</div>
+<p>Já tem conta? <a href="/login">Entrar</a></p>
+
+@code {
+    string username = string.Empty;
+    string password = string.Empty;
+    string message = string.Empty;
+
+    async Task HandleRegister()
+    {
+        var ok = await UserService.RegisterAsync(username, password);
+        if (ok)
+        {
+            Nav.NavigateTo("/login");
+        }
+        else
+        {
+            message = "Usuário já existe";
+        }
+    }
+}

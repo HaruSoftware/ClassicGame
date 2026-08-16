@@ -1,0 +1,35 @@
+@page "/login"
+@inject CoraApp.Services.UserService UserService
+@inject NavigationManager Nav
+
+<h3>Login</h3>
+<p style="color:red">@message</p>
+<div>
+    <input placeholder="Usuário" @bind="username" />
+</div>
+<div>
+    <input placeholder="Senha" type="password" @bind="password" />
+</div>
+<div>
+    <button @onclick="HandleLogin">Entrar</button>
+</div>
+<p>Não tem conta? <a href="/register">Registre-se</a></p>
+
+@code {
+    string username = string.Empty;
+    string password = string.Empty;
+    string message = string.Empty;
+
+    async Task HandleLogin()
+    {
+        var ok = await UserService.AuthenticateAsync(username, password);
+        if (ok)
+        {
+            Nav.NavigateTo("/welcome");
+        }
+        else
+        {
+            message = "Login inválido";
+        }
+    }
+}
